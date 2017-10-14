@@ -189,6 +189,20 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
+@app.route('/', methods=['GET'])
+def root():
+    import urllib
+
+    output = []
+    for rule in app.url_map.iter_rules():
+        methods = ','.join(rule.methods)
+        line = urllib.parse.unquote("{:20s} {:20s} {}".format(rule.endpoint, methods, rule))
+        output.append(line)
+
+    #for line in sorted(output):
+    #    print line
+    return 'Blockchain<br>\n<pre>\n{}</pre>'.format('<br>\n'.join(output)), 200
+
 @app.route('/mine', methods=['GET'])
 def mine():
     # We run the proof of work algorithm to get the next proof...
